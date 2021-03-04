@@ -12,15 +12,23 @@ startBot({
     messageCreate(message) {
       switch (message.content) {
 	case "!ping":
-	  message.reply("Pong using Discordeno")
+	  invokeCommand('ping').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
 	  break;
+	case "!ip":
+	  invokeCommand('ip').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+          break;
 	case "!uname":
 	  invokeCommand('uname').then(results => message.reply(results)).catch(results => message.reply('Error processing command, check logs'));
 	  break;
 	case "!pwd":
 	  invokeCommand('pwd').then(results => message.reply(results)).catch(results => message.reply('Error processing command, check logs'));
+	  break;
 	case "!status":
 	  invokeCommand('status').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+	  break;
+	case "!update":
+	  invokeCommand('update').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+	  break;
       }
     },
   },
