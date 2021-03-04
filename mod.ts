@@ -1,10 +1,10 @@
-import { startBot } from "https://deno.land/x/discordeno/mod.ts";
-import { invokeCommand } from './invokeCommand.ts'
-import { token } from './secrets.ts'
+import { startBot } from "https://cdn.deno.land/discordeno/versions/10.4.0/raw/mod.ts";
+import { invokeCommand } from './invokeCommand.ts';
+import { token } from './secrets.ts';
 
 startBot({
   token,
-  intents: ["GUILDS", "GUILD_MESSAGES"],
+  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS", "GUILD_WEBHOOKS"],
   eventHandlers: {
     ready() {
       console.log("Successfully connected to gateway");
@@ -19,6 +19,8 @@ startBot({
 	  break;
 	case "!pwd":
 	  invokeCommand('pwd').then(results => message.reply(results)).catch(results => message.reply('Error processing command, check logs'));
+	case "!status":
+	  invokeCommand('status').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
       }
     },
   },
