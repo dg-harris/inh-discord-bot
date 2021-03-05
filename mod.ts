@@ -32,6 +32,9 @@ startBot({
         case "!players":
           invokeCommand('players').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
           break;
+        case "!help":
+  	  invokeCommand('help').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+          break;
       }
     },
   },

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ping -c 1 google.com
+ping -c 1 google.com | grep "bytes from"
