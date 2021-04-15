@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "!stats - shows TOP information on server."
 echo "!players - lists number of players on running server."
 echo "!ping - shows 1 packet ping information."
 echo "!ip - displays server IP."
