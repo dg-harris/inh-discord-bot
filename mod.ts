@@ -38,6 +38,15 @@ startBot({
         case "!stats":
           invokeCommand('stats').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
           break;
+	case "!factorio start":
+	  invokeCommand('factorio-start').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+          break;
+	case "!factorio update":
+	  invokeCommand('factorio-update').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+          break;
+        case "!factorio status":
+          invokeCommand('factorio-status').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
+          break;
       }
     },
   },
