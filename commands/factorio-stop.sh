@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo "Valheim is currently" $(systemctl is-active valheim)
+sudo systemctl stop factorio
+
 echo "Factorio is currently" $(systemctl is-active factorio)
