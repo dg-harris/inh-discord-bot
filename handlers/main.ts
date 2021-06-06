@@ -17,8 +17,6 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeShellTask("ip");
     case "status":
       return invokeShellTask("status");
-    case "update":
-      return invokeShellTask("update");
     case "help":
       return invokeShellTask("help");
     case "stats":
@@ -27,7 +25,7 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeFactorioCommand(command);
     case "valheim":
       return invokeValheimCommand(command);
-    case "commands":
+    case "bot":
       return Promise.resolve(
         getButtonGridPayload("choose a command", [
           [
@@ -45,7 +43,6 @@ export const handleCommand: CommandHandler = (command) => {
             { label: "ping", custom_id: "ping" },
             { label: "ip", custom_id: "ip" },
             { label: "status", custom_id: "status" },
-            { label: "update", custom_id: "update" },
             { label: "stats", custom_id: "stats" },
           ],
           [
