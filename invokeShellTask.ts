@@ -1,0 +1,15 @@
+import { CommandRunner } from "./global.types.ts";
+import { invokeRawCommand } from "./invokeRawCommand.ts";
+import { isDryRun } from "./util/isDryRun.ts";
+
+/**
+ * Executes a shell script from shellTasks and returns the output
+ * @param command command name, should match a shellscript in the shellTasks folder
+ * @returns results of the command as a string
+ */
+
+// deno-lint-ignore require-await -- this is done for consistency and to return a promise from dry run automatically
+export const invokeShellTask: CommandRunner = async (command, skipDryRun) => {
+  const script = `./shellTasks/${command}.sh`;
+  return invokeRawCommand(script, skipDryRun);
+};
