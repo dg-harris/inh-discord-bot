@@ -1,6 +1,15 @@
 import { startBot } from "https://cdn.deno.land/discordeno/versions/10.4.0/raw/mod.ts";
-import { invokeCommand } from './invokeCommand.ts';
-import { token } from './secrets.ts';
+import { token } from "./secrets.ts";
+import {
+  parseInteractionCommand,
+  parseMessageCommand,
+} from "./parseCommand.ts";
+import { handleCommand } from "./handlers/main.ts";
+import { sendInteractionResponse } from "./messaging/sendInteractionResponse.ts";
+import { DiscordResponse } from "./global.types.ts";
+
+// deno-lint-ignore no-explicit-any -- this is for typecasting, any is appropriate here
+const isString = (obj: any) => typeof obj === "string";
 
 startBot({
   token,
@@ -10,55 +19,47 @@ startBot({
       console.log("Successfully connected to gateway");
     },
     messageCreate(message) {
-      switch (message.content) {
-	case "!ping":
-	  invokeCommand('ping').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-	  break;
-	case "!ip":
-	  invokeCommand('ip').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-	case "!status":
-	  invokeCommand('status').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-	  break;
-	case "!update":
-	  invokeCommand('update').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-	  break;
-        case "!players":
-          invokeCommand('players').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!help":
-	  invokeCommand('help').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!stats":
-          invokeCommand('stats').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-	case "!factorio start":
-	  invokeCommand('factorio-start').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-	case "!factorio stop":
-          invokeCommand('factorio-stop').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-	case "!factorio update":
-	  invokeCommand('factorio-update').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!factorio status":
-          invokeCommand('factorio-status').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-	case "!valheim start":
-          invokeCommand('valheim-start').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!valheim stop":
-          invokeCommand('valheim-stop').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!valheim update":
-          invokeCommand('valheim-update').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
-        case "!valheim players":
-          invokeCommand('valheim-players').then(results => message.reply(results)).catch(results => message.reply('Error processing status. Check Log.'));
-          break;
+      const command = parseMessageCommand(message.content);
+      if (!command) {
+        return;
       }
+
+      const sendResponse = (results: DiscordResponse) => {
+        if (isString(results)) message.reply(results);
+        else {
+          try {
+            message.channel?.send({
+              payload_json: JSON.stringify(results),
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      };
+
+      const sendError = (e: Error) =>
+        message.reply(`Error Sending Command\nError: ${e.message}`);
+
+      handleCommand(command).then(sendResponse).catch(sendError);
+    },
+    interactionCreate(data) {
+      //@ts-ignore data typing is missing the new custom_id property for buttons that we need
+      const command = parseInteractionCommand(data);
+
+      handleCommand(command).then((result) => {
+        const response = {
+          type: 7,
+          data: isString(result) ? { content: result, components: [] } : result,
+        };
+
+        sendInteractionResponse(response, data)
+          .then((response) => {
+            if (response.status !== 200) {
+              response.text().then((body) => console.error(body));
+            }
+          })
+          .catch((error) => console.error(error));
+      });
     },
   },
 });
-
-// const invokeCommandMessaging(command: () => Promise<String>, message
