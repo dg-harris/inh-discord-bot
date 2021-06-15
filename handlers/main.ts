@@ -8,6 +8,7 @@ import { isDryRun } from "../util/isDryRun.ts";
 import { invokeFactorioCommand } from "./factorio.ts";
 import { invokeTestCommand } from "./test.ts";
 import { invokeValheimCommand } from "./valheim.ts";
+import { invokeZomboidCommand } from "./zomboid.ts";
 
 export const handleCommand: CommandHandler = (command) => {
   switch (command.name) {
@@ -25,6 +26,8 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeFactorioCommand(command);
     case "valheim":
       return invokeValheimCommand(command);
+    case "zomboid":
+      return invokeZomboidCommand(command);
     case "bot":
       return Promise.resolve(
         getButtonGridPayload("choose a command", [
@@ -38,6 +41,11 @@ export const handleCommand: CommandHandler = (command) => {
               label: "⚙️ Factorio",
               custom_id: "factorio",
             },
+	    {
+              label: "🧟 Zomboid",
+              custom_id: "zomboid",
+            },
+
           ],
           [
             { label: "ping", custom_id: "ping" },
