@@ -7,7 +7,7 @@ export enum ButtonStyles {
   Link = 5, // grey and only used with links
 }
 
-interface ButtonParams {
+export interface ButtonParams {
   type?: number;
   style?: ButtonStyles;
   emoji?: {
