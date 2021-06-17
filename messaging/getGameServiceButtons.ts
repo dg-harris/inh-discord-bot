@@ -41,12 +41,5 @@ export const getGameServiceButtons = (
       },
       ...additionalButtons,
     ],
-    [
-      {
-        label: "cancel",
-        custom_id: "cancel",
-        style: ButtonStyles.Secondary,
-      },
-    ],
   ]);
 };

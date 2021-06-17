@@ -1,6 +1,5 @@
 import { CommandRunner } from "./global.types.ts";
 import { invokeRawCommand } from "./invokeRawCommand.ts";
-import { isDryRun } from "./util/isDryRun.ts";
 
 /**
  * Executes a shell script from shellTasks and returns the output
