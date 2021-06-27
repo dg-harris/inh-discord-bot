@@ -1,11 +1,10 @@
-import { CommandHandler, DiscordResponse } from "../global.types.ts";
-import { invokeShellTask } from "../invokeShellTask.ts";
+import { Command, CommandHandler, DiscordResponse } from "../global.types.ts";
+import { invokeShellTask } from "../util/invokeShellTask.ts";
 import {
   ButtonParams,
   ButtonStyles,
   getButtonGridPayload,
 } from "../messaging/getButtonPayload.ts";
-import { Command } from "../parseCommand.ts";
 
 interface CommandConfig {
   task: (command: Command) => Promise<DiscordResponse>;

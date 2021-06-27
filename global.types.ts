@@ -1,5 +1,9 @@
 import { ButtonPayload } from "./messaging/getButtonPayload.ts";
-import { Command } from "./parseCommand.ts";
+
+export interface Command {
+  name: string;
+  args: string[];
+}
 
 export type DiscordResponse = string | ButtonPayload;
 
