@@ -41,11 +41,10 @@ export const handleCommand: CommandHandler = (command) => {
               label: "⚙️ Factorio",
               custom_id: "factorio",
             },
-	    {
+            {
               label: "🧟 Zomboid",
               custom_id: "zomboid",
             },
-
           ],
           [
             { label: "ping", custom_id: "ping" },
@@ -62,6 +61,8 @@ export const handleCommand: CommandHandler = (command) => {
           ],
         ])
       );
+    case "cancel":
+      return Promise.resolve("Command was cancelled");
     case "test":
       if (isDryRun()) {
         return invokeTestCommand(command);

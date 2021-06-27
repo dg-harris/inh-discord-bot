@@ -7,7 +7,7 @@ export enum ButtonStyles {
   Link = 5, // grey and only used with links
 }
 
-interface ButtonParams {
+export interface ButtonParams {
   type?: number;
   style?: ButtonStyles;
   emoji?: {
@@ -33,24 +33,39 @@ const defaultButton = {
   style: 1,
 };
 
+const cancelButton: ButtonSettings = {
+  type: 2,
+  style: ButtonStyles.Secondary,
+  label: "Cancel",
+  custom_id: "cancel",
+};
+
 export const getButtonPayload = (
   content: string,
-  buttons: ButtonParams[]
+  buttons: ButtonParams[],
+  excludeCancel?: boolean
 ): ButtonPayload => {
+  const components = buttons.map((button) => ({ ...defaultButton, ...button }));
+
   return {
     content,
     components: [
       {
         type: 1,
-        components: buttons.map((button) => ({ ...defaultButton, ...button })),
+        components: excludeCancel ? components : [...components, cancelButton],
       },
     ],
   };
 };
 export const getButtonGridPayload = (
   content: string,
-  buttonGrid: ButtonParams[][]
+  buttonGrid: ButtonParams[][],
+  excludeCancel?: boolean
 ) => {
+  if (!excludeCancel) {
+    buttonGrid.push([cancelButton]);
+  }
+
   return {
     content,
     components: buttonGrid.map((buttonRow) => {
