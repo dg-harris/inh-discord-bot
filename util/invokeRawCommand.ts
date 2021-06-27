@@ -1,5 +1,5 @@
-import { CommandRunner } from "./global.types.ts";
-import { isDryRun } from "./util/isDryRun.ts";
+import { CommandRunner } from "../global.types.ts";
+import { isDryRun } from "./isDryRun.ts";
 
 /**
  * CAUTION: DO NOT PASS USER INPUT DIRECLTY INTO THIS FUNCTION

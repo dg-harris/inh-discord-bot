@@ -1,4 +1,4 @@
-import { isDryRun } from "./util/isDryRun.ts";
+import { isDryRun } from "./isDryRun.ts";
 
 export interface Command {
   name: string;

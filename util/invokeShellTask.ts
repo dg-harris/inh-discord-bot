@@ -1,4 +1,4 @@
-import { CommandRunner } from "./global.types.ts";
+import { CommandRunner } from "../global.types.ts";
 import { invokeRawCommand } from "./invokeRawCommand.ts";
 
 /**
