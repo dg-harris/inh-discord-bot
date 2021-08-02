@@ -1,5 +1,5 @@
 import { CommandHandler } from "../global.types.ts";
-import { invokeShellTask } from "../invokeShellTask.ts";
+import { invokeShellTask } from "../util/invokeShellTask.ts";
 import {
   ButtonStyles,
   getButtonGridPayload,

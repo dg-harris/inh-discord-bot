@@ -1,9 +1,5 @@
-import { isDryRun } from "./util/isDryRun.ts";
-
-export interface Command {
-  name: string;
-  args: string[];
-}
+import { isDryRun } from "./isDryRun.ts";
+import { Command } from "../global.types.ts";
 
 const parseCommand = (commandText: string): Command => {
   const [name, ...args] = commandText.split(" ");

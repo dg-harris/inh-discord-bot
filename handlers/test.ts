@@ -1,5 +1,5 @@
-import { invokeRawCommand } from "../invokeRawCommand.ts";
-import { invokeShellTask } from "../invokeShellTask.ts";
+import { invokeRawCommand } from "../util/invokeRawCommand.ts";
+import { invokeShellTask } from "../util/invokeShellTask.ts";
 import {
   ButtonStyles,
   getButtonPayload,

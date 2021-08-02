@@ -3,7 +3,7 @@ import { token } from "./secrets.ts";
 import {
   parseInteractionCommand,
   parseMessageCommand,
-} from "./parseCommand.ts";
+} from "./util/parseCommand.ts";
 import { handleCommand } from "./handlers/main.ts";
 import { sendInteractionResponse } from "./messaging/sendInteractionResponse.ts";
 import { DiscordResponse } from "./global.types.ts";
