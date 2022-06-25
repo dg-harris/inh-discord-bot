@@ -9,6 +9,7 @@ import { invokeFactorioCommand } from "./factorio.ts";
 import { invokeTestCommand } from "./test.ts";
 import { invokeValheimCommand } from "./valheim.ts";
 import { invokeZomboidCommand } from "./zomboid.ts";
+import { invokeVRisingCommand } from "./vrising.ts";
 
 export const handleCommand: CommandHandler = (command) => {
   switch (command.name) {
@@ -26,6 +27,8 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeFactorioCommand(command);
     case "valheim":
       return invokeValheimCommand(command);
+    case "vrising":
+      return invokeVRisingCommand(command);
     case "zomboid":
       return invokeZomboidCommand(command);
     case "bot":
@@ -44,6 +47,10 @@ export const handleCommand: CommandHandler = (command) => {
             {
               label: "🧟 Zomboid",
               custom_id: "zomboid",
+            },
+		{
+              label: "🧛 V Rising",
+              custom_id: "vrising",
             },
           ],
           [
