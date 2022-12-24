@@ -1,36 +1,47 @@
-import { startBot } from "https://cdn.deno.land/discordeno/versions/10.4.0/raw/mod.ts";
-import { token } from "./secrets.ts";
+import {
+  Intents,
+  createBot,
+  startBot,
+} from "https://deno.land/x/discordeno@17.0.0/mod.ts";
 import {
   parseInteractionCommand,
   parseMessageCommand,
 } from "./util/parseCommand.ts";
-import { handleCommand } from "./handlers/main.ts";
-import { sendInteractionResponse } from "./messaging/sendInteractionResponse.ts";
+
 import { DiscordResponse } from "./global.types.ts";
+import { handleCommand } from "./handlers/main.ts";
+import { sendInteractionResponse } from "./botResponses/sendInteractionResponse.ts";
+import { startServer } from "./localServer/mod.ts";
+import { token } from "./secrets.ts";
 
-// deno-lint-ignore no-explicit-any -- this is for typecasting, any is appropriate here
-const isString = (obj: any) => typeof obj === "string";
+const isString = (obj: DiscordResponse): obj is string =>
+  typeof obj === "string";
 
-startBot({
+const bot = createBot({
   token,
-  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_EMOJIS", "GUILD_WEBHOOKS"],
-  eventHandlers: {
-    ready() {
+  intents:
+    Intents.Guilds |
+    Intents.GuildMessages |
+    Intents.GuildEmojis |
+    Intents.GuildWebhooks |
+    Intents.MessageContent,
+  events: {
+    ready(bot) {
       console.log("Successfully connected to gateway");
+      startServer(bot);
     },
-    messageCreate(message) {
+    messageCreate(client, message) {
       const command = parseMessageCommand(message.content);
       if (!command) {
         return;
       }
 
       const sendResponse = (results: DiscordResponse) => {
-        if (isString(results)) message.reply(results);
+        if (isString(results))
+          client.helpers.sendMessage(message.channelId, { content: results });
         else {
           try {
-            message.channel?.send({
-              payload_json: JSON.stringify(results),
-            });
+            client.helpers.sendMessage(message.channelId, results);
           } catch (e) {
             console.error(e);
           }
@@ -38,13 +49,18 @@ startBot({
       };
 
       const sendError = (e: Error) =>
-        message.reply(`Error Sending Command\nError: ${e.message}`);
+        client.helpers.sendMessage(message.channelId, {
+          content: `Error Sending Command\nError: ${e.message}`,
+        });
 
       handleCommand(command).then(sendResponse).catch(sendError);
     },
-    interactionCreate(data) {
-      //@ts-ignore data typing is missing the new custom_id property for buttons that we need
-      const command = parseInteractionCommand(data);
+    interactionCreate(_, interaction) {
+      const command = parseInteractionCommand(interaction);
+      if (!command) {
+        console.error(`did not recieve customId for interaction`);
+        return;
+      }
 
       handleCommand(command).then((result) => {
         const response = {
@@ -52,7 +68,7 @@ startBot({
           data: isString(result) ? { content: result, components: [] } : result,
         };
 
-        sendInteractionResponse(response, data)
+        sendInteractionResponse(response, interaction)
           .then((response) => {
             if (response.status !== 200) {
               response.text().then((body) => console.error(body));
@@ -63,3 +79,5 @@ startBot({
     },
   },
 });
+
+startBot(bot);
