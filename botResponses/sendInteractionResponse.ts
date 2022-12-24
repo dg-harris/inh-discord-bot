@@ -24,7 +24,6 @@ export const sendInteractionResponse = (
 
   const transformedResponse: any = { ...response };
   transformedResponse.data.components = components;
-  console.log(JSON.stringify(transformedResponse, null, 2));
 
   return fetch(url, {
     method: "POST",
