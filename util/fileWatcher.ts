@@ -30,6 +30,5 @@ export const watchFile = async (
         action(newContent);
       }
     }
-    // Example event: { kind: "create", paths: [ "/home/alice/deno/foo.txt" ] }
   }
 };

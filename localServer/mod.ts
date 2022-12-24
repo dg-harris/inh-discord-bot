@@ -84,12 +84,5 @@ const handleRequest = async (httpConn: Deno.HttpConn, botContext: Bot) => {
         status: 200,
       })
     );
-    // The requestEvent's `.respondWith()` method is how we send the response
-    // back to the client.
-    // requestEvent.respondWith(
-    //   new Response(body, {
-    //     status: 200,
-    //   })
-    // );
   }
 };
