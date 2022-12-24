@@ -4,6 +4,7 @@ import { getButtonGridPayload } from "../botResponses/buttons.ts";
 import { invokeFactorioCommand } from "./factorio.ts";
 import { invokeShellTask } from "../util/invokeShellTask.ts";
 import { invokeTestCommand } from "./test.ts";
+import { invokeVRisingCommand } from "./vrising.ts";
 import { invokeValheimCommand } from "./valheim.ts";
 import { invokeZomboidCommand } from "./zomboid.ts";
 import { isDryRun } from "../util/isDryRun.ts";
@@ -24,6 +25,8 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeFactorioCommand(command);
     case "valheim":
       return invokeValheimCommand(command);
+    case "vrising":
+      return invokeVRisingCommand(command);
     case "zomboid":
       return invokeZomboidCommand(command);
     case "bot":
@@ -42,6 +45,10 @@ export const handleCommand: CommandHandler = (command) => {
             {
               label: "🧟 Zomboid",
               customId: "zomboid",
+            },
+            {
+              label: "🧛 V Rising",
+              customId: "vrising",
             },
           ],
           [
