@@ -1,5 +1,5 @@
-import { isDryRun } from "./isDryRun.ts";
 import { Command } from "../global.types.ts";
+import { isDryRun } from "./isDryRun.ts";
 
 const parseCommand = (commandText: string): Command => {
   const [name, ...args] = commandText.split(" ");
@@ -19,11 +19,18 @@ export const parseMessageCommand = (message: string): Command | false => {
 };
 
 interface Interaction {
-  data: {
-    custom_id: string;
+  data?: {
+    customId?: string;
   };
 }
-export const parseInteractionCommand = (interaction: Interaction): Command => {
-  //TODO: filter for applicationId?
-  return parseCommand(interaction.data.custom_id);
+
+//TODO: filter for applicationId?
+export const parseInteractionCommand = (
+  interaction: Interaction
+): Command | undefined => {
+  if (!interaction?.data?.customId) {
+    return undefined;
+  }
+
+  return parseCommand(interaction.data.customId);
 };

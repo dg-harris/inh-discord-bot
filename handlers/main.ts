@@ -1,15 +1,13 @@
+import { ButtonStyles } from "../botResponses/messaging.types.ts";
 import { CommandHandler } from "../global.types.ts";
-import { invokeShellTask } from "../util/invokeShellTask.ts";
-import {
-  ButtonStyles,
-  getButtonGridPayload,
-} from "../messaging/getButtonPayload.ts";
-import { isDryRun } from "../util/isDryRun.ts";
+import { getButtonGridPayload } from "../botResponses/buttons.ts";
 import { invokeFactorioCommand } from "./factorio.ts";
+import { invokeShellTask } from "../util/invokeShellTask.ts";
 import { invokeTestCommand } from "./test.ts";
+import { invokeVRisingCommand } from "./vrising.ts";
 import { invokeValheimCommand } from "./valheim.ts";
 import { invokeZomboidCommand } from "./zomboid.ts";
-import { invokeVRisingCommand } from "./vrising.ts";
+import { isDryRun } from "../util/isDryRun.ts";
 
 export const handleCommand: CommandHandler = (command) => {
   switch (command.name) {
@@ -37,32 +35,32 @@ export const handleCommand: CommandHandler = (command) => {
           [
             {
               label: "Valheim",
-              custom_id: "valheim",
+              customId: "valheim",
               emoji: { name: "viking", id: "816717521611784272" },
             },
             {
               label: "⚙️ Factorio",
-              custom_id: "factorio",
+              customId: "factorio",
             },
             {
               label: "🧟 Zomboid",
-              custom_id: "zomboid",
+              customId: "zomboid",
             },
-		{
+            {
               label: "🧛 V Rising",
-              custom_id: "vrising",
+              customId: "vrising",
             },
           ],
           [
-            { label: "ping", custom_id: "ping" },
-            { label: "ip", custom_id: "ip" },
-            { label: "status", custom_id: "status" },
-            { label: "stats", custom_id: "stats" },
+            { label: "ping", customId: "ping" },
+            { label: "ip", customId: "ip" },
+            { label: "status", customId: "status" },
+            { label: "stats", customId: "stats" },
           ],
           [
             {
               label: "❓ help",
-              custom_id: "help",
+              customId: "help",
               style: ButtonStyles.Secondary,
             },
           ],
