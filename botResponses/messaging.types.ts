@@ -3,7 +3,7 @@ import {
   ButtonComponent,
   CreateMessage,
   MessageComponentTypes,
-} from "https://deno.land/x/discordeno@17.0.0/mod.ts";
+} from "../deps.ts";
 
 export type DiscordCreateMessagePayload = CreateMessage;
 

@@ -1,8 +1,4 @@
-import {
-  Intents,
-  createBot,
-  startBot,
-} from "https://deno.land/x/discordeno@17.0.0/mod.ts";
+import { Intents, createBot, startBot } from "./deps.ts";
 import {
   parseInteractionCommand,
   parseMessageCommand,

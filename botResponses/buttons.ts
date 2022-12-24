@@ -36,7 +36,7 @@ const cancelButton = {
 /**
  * Maps button params to a full button message,
  * Primarily for setting defaults for buttons or any other abstractions
- * we want to make. Also keeps id's a strings because we're not psychos like discordeno
+ * we want to make. Also keeps id's a strings because that's how they're sent over the wire
  * @param buttonParams Settings for a given button
  */
 const getButtonComponent = (

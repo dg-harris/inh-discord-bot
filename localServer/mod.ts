@@ -1,6 +1,6 @@
 import { devChannelId, valheimChannelId } from "../secrets.ts";
 
-import { Bot } from "https://deno.land/x/discordeno@17.0.0/mod.ts";
+import { Bot } from "../deps.ts";
 
 const channels = {
   dev: devChannelId,
