@@ -1,9 +1,19 @@
 #!/bin/bash
 
-if [ $player -ne 0 ]; then
-  echo "Error, cannot stop when people are playing. Currently $player playing."
+#if [ $player -ne 0 ]; then
+#  echo "Error, cannot stop when people are playing. Currently $player playing."
+#exit
+#fi
+
+enter="$(grep -o -i ": Got connection SteamID" /home/kvamme/logs/valheim_log.txt | wc -l)"
+left="$(grep -o -i ": Closing socket" /home/kvamme/logs/valheim_log.txt | wc -l)"
+
+if [ $(($enter-$left)) -ne 0 ]; then
+	echo "Cannot stop while people are playing!"
 exit
 fi
+
+sudo systemctl stop logger
 
 sudo systemctl stop valheim
 
