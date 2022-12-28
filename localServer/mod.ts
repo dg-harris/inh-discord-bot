@@ -1,4 +1,4 @@
-import { devChannelId, valheimChannelId } from "../secrets.ts";
+import { devChannelId, valheimChannelId, devMessageId, valheimMessageId } from "../secrets.ts";
 
 import { Bot } from "../deps.ts";
 
@@ -9,8 +9,18 @@ const channels = {
 type ChannelName = keyof typeof channels;
 const channelList = Object.keys(channels);
 
+const messages = {
+  devM: devMessageId,
+  valheimM: valheimMessageId,
+};
+type MessageName = keyof typeof messages;
+const messageList = Object.keys(messages);
+
 const isValidChannel = (string: string): string is ChannelName =>
   channelList.includes(string);
+
+const isValidMessage = (string: string): string is MessageName =>
+  messageList.includes(string);
 
 /**
  * Starts a small local http server
@@ -46,21 +56,22 @@ const handleRequest = async (httpConn: Deno.HttpConn, botContext: Bot) => {
       );
     }
 
-    // Validate channel
+    // Validate channel/message
     const path = url.split("/").pop();
-    if (!path || !isValidChannel(path)) {
+    if (!path || (!isValidChannel(path) && !isValidMessage(path))) {
       return requestEvent.respondWith(
         new Response(
           JSON.stringify({
             message: "please add a valid channel name to the url path",
             channelList,
+			messageList,
             channel: path,
           }),
           { status: 400 }
         )
       );
     }
-    const channel = channels[path];
+    //const channel = channels[path];
 
     // Validate Content
     // TODO: support more sophisticated content
@@ -77,7 +88,16 @@ const handleRequest = async (httpConn: Deno.HttpConn, botContext: Bot) => {
       );
     }
 
-    await botContext.helpers.sendMessage(channel, { content });
+	
+	if(isValidMessage(path)){
+		const channel = channels[path.slice(0,-1)];
+		const mess = messages[path];
+		await botContext.helpers.editMessage(channel, mess, { content });
+	}
+	else{
+		const channel = channels[path];
+		await botContext.helpers.sendMessage(channel, { content });
+	}
 
     requestEvent.respondWith(
       new Response(JSON.stringify({ body, channel: path, status: "success" }), {
