@@ -17,6 +17,6 @@ sudo systemctl stop logger
 
 sudo systemctl stop valheim
 
-curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.
+curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'."}'
 
 echo "Valheim is currently" $(systemctl is-active valheim)
