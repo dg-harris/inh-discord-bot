@@ -6,14 +6,14 @@ function log () {
     fi
 }
 
-enter="$(journalctl -b -u valheim | grep -c ": Got connection SteamID")"
-left="$(journalctl -b -u valheim | grep -c ": Closing socket")"
-player="$(($enter-$left))"
+#enter="$(journalctl -b -u valheim | grep -c ": Got connection SteamID")"
+#left="$(journalctl -b -u valheim | grep -c ": Closing socket")"
+#player="$(($enter-$left))"
 
-if [ $player -ne 0 ]; then
-  echo "Error, cannot restart when people are playing. Currently $player playing."
-exit
-fi
+#if [ $player -ne 0 ]; then
+#  echo "Error, cannot restart when people are playing. Currently $player playing."
+#exit
+#fi
 
 v1=$(sudo systemctl stop valheim 2> /dev/null)
 

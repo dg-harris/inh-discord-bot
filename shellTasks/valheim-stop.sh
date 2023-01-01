@@ -13,9 +13,9 @@ if [ $(($enter-$left)) -ne 0 ]; then
 exit
 fi
 
-sudo systemctl stop logger
-
 sudo systemctl stop valheim
+
+sudo systemctl stop logger
 
 curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'."}'
 
