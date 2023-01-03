@@ -20,7 +20,8 @@ const bot = createBot({
     Intents.GuildMessages |
     Intents.GuildEmojis |
     Intents.GuildWebhooks |
-    Intents.MessageContent,
+    Intents.MessageContent |
+    Intents.DirectMessages,
   events: {
     ready(bot) {
       console.log("Successfully connected to gateway");

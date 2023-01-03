@@ -5,7 +5,21 @@ newPlayer=false
 declare -A steam=( ["76561197981323839"]="Kvm" ["76561197988338431"]="Jonah" ["76561197972464107"]="Dylla" ["76561197966389725"]="Mordechaos")
 arrPlay=("")
 
-curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing."}'
+getMessagePayload() {
+  echo "'"{\"content\": \"$1\"}"'"
+}
+
+sendMessage() {
+  local json=$(getMessagePayload $1)
+  curl -X POST 127.0.0.1:8080/messages/dev -d $json
+}
+
+setPinnedMessage() {
+  local json=$(getMessagePayload $1)
+  curl -X PUT 127.0.0.1:8080/pinned/valheim -d $json
+}
+
+setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing."
 
 array_contains2 () {
     local array="$1[@]"
@@ -37,7 +51,7 @@ do
 				joined=`echo $(echo ${arrPlay[@]}) | tr ' ' ','`
 				echo "Player Joined ($VALPLAYERS)"
 				VALPLAYERS=$((${#arrPlay[@]}))
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing - '"($joined)"'"}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing - ($joined)"
 			fi;;
 		*"Closing socket"*)
 			#((VALPLAYERS-=1))
@@ -49,9 +63,9 @@ do
             joined=`echo $(echo ${arrPlay[@]}) | tr ' ' ','`
 			VALPLAYERS=$((${#arrPlay[@]}))
 			if [ "$joined" = "" ]; then
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n(0) playing."}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n(0) playing - ($joined)"
 			else
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing - '"($joined)"'"}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing - ($joined)"
 			fi;;
 		*)
     esac
@@ -75,7 +89,7 @@ while read line ; do
 				joined=`echo $(echo ${arrPlay[@]}) | tr ' ' ','`
 				echo "Player Joined ($VALPLAYERS)"
 				VALPLAYERS=$((${#arrPlay[@]}))
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing - '"($joined)"'"}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing - ($joined)"
 			fi;;
 		*"Closing socket"*)
 			#((VALPLAYERS-=1))
@@ -87,9 +101,9 @@ while read line ; do
             joined=`echo $(echo ${arrPlay[@]}) | tr ' ' ','`
 			VALPLAYERS=$((${#arrPlay[@]}))
 			if [ "$joined" = "" ]; then
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing."}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing."
 			else
-				curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'.\n'"($VALPLAYERS)"' playing - '"($joined)"'"}'
+        setPinnedMessage "Valheim is currently $(systemctl is-active valheim).\n($VALPLAYERS) playing - ($joined)"
 			fi;;
 		*)
 	esac

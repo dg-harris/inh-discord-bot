@@ -8,15 +8,15 @@
 enter="$(grep -o -i ": Got connection SteamID" /home/kvamme/logs/valheim_log.txt | wc -l)"
 left="$(grep -o -i ": Closing socket" /home/kvamme/logs/valheim_log.txt | wc -l)"
 
-if [ $(($enter-$left)) -ne 0 ]; then
+if [ $(($enter - $left)) -ne 0 ]; then
 	echo "Cannot stop while people are playing!"
-exit
+	exit
 fi
 
 sudo systemctl stop valheim
 
 sudo systemctl stop logger
 
-curl -X POST 127.0.0.1:8080/valheimM -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'."}'
+curl -X POST 127.0.0.1:8080/pinned/valheim -d '{"content": "Valheim is currently '"$(systemctl is-active valheim)"'."}'
 
 echo "Valheim is currently" $(systemctl is-active valheim)
