@@ -33,6 +33,8 @@ const bot = createBot({
         return;
       }
 
+      client.helpers.addReaction(message.channelId, message.id, "✅");
+
       const sendResponse = (results: DiscordResponse) => {
         if (isString(results))
           client.helpers.sendMessage(message.channelId, { content: results });
