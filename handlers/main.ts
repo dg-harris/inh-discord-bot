@@ -6,6 +6,7 @@ import { invokeShellTask } from "../util/invokeShellTask.ts";
 import { invokeTestCommand } from "./test.ts";
 import { invokeVRisingCommand } from "./vrising.ts";
 import { invokeValheimCommand } from "./valheim.ts";
+import { invokeForestCommand } from "./forest.ts";
 import { invokeZomboidCommand } from "./zomboid.ts";
 import { isDryRun } from "../util/isDryRun.ts";
 
@@ -27,6 +28,8 @@ export const handleCommand: CommandHandler = (command) => {
       return invokeValheimCommand(command);
     case "vrising":
       return invokeVRisingCommand(command);
+    case "forest":
+      return invokeForestCommand(command);
     case "zomboid":
       return invokeZomboidCommand(command);
     case "bot":
@@ -49,6 +52,10 @@ export const handleCommand: CommandHandler = (command) => {
             {
               label: "🧛 V Rising",
               customId: "vrising",
+            },
+		{
+              label: "🌲 The Forest",
+              customId: "forest",
             },
           ],
           [
