@@ -1,8 +1,12 @@
+const jsonResponse = (response: unknown, status: number) =>
+  new Response(JSON.stringify(response), { status });
+
 export const httpInvalidRequest = (response: unknown) =>
-  new Response(JSON.stringify(response), { status: 400 });
+  jsonResponse(response, 400);
 
 export const httpMethodNotSupported = (response: unknown) =>
-  new Response(JSON.stringify(response), { status: 405 });
+  jsonResponse(response, 405);
 
-export const httpOk = (response: unknown) =>
-  new Response(JSON.stringify(response), { status: 200 });
+export const httpOk = (response: unknown) => jsonResponse(response, 200);
+
+export const notFound = (response: unknown) => jsonResponse(response, 404);

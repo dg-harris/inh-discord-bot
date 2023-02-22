@@ -5,24 +5,16 @@ import {
   httpOk,
 } from "./responses.ts";
 
-import { Bot } from "../deps.ts";
+import { RouteHandler } from "./localServer.types.ts";
 import { discordMessageSchema } from "./schemas.ts";
 
-export const messagesRoute = new URLPattern({
+export const route = new URLPattern({
   pathname: "/messages/:channelName/:messageId?",
 });
 
-export const messagesRouter = async (
-  req: Request,
-  botContext: Bot
-): Promise<Response | undefined> => {
-  const match = messagesRoute.exec(req.url);
-  if (!match) {
-    return undefined;
-  }
-
-  const channelName = match.pathname.groups.channelName;
+const handler: RouteHandler = async (match, req, botContext) => {
   const messageId = match.pathname.groups.messageId;
+  const channelName = match.pathname.groups.channelName;
 
   if (!isValidChannel(channelName)) {
     return httpInvalidRequest({
@@ -31,12 +23,21 @@ export const messagesRouter = async (
   }
   const channelId = getChannel(channelName);
 
-  const body = await req.json().catch((e) => {
-    console.error(e);
-    return e;
-  });
+  const text = await req.text();
+  let body;
+  try {
+    body = JSON.parse(text);
+  } catch (e) {
+    console.error;
+    body = e;
+  }
+  // const body = await req.json().catch((e) => {
+  // console.error(e);
+  // return e;
+  // });
+
   if (body instanceof Error) {
-    return httpInvalidRequest({ ...body, message: "invalid json" });
+    return httpInvalidRequest({ ...body, message: "invalid json", body: text });
   }
 
   switch (req.method) {
@@ -71,4 +72,9 @@ export const messagesRouter = async (
     default:
       return httpMethodNotSupported(`method "${req.method}" not supported`);
   }
+};
+
+export default {
+  route,
+  handler,
 };

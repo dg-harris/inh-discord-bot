@@ -5,7 +5,7 @@ const channels = {
   valheim: valheimChannelId,
 };
 
-type ChannelName = keyof typeof channels;
+export type ChannelName = keyof typeof channels;
 const channelList = Object.keys(channels);
 
 export const isValidChannel = (string: string): string is ChannelName =>

@@ -5,24 +5,15 @@ import {
   httpOk,
 } from "./responses.ts";
 
-import { Bot } from "../deps.ts";
+import { RouteHandler } from "./localServer.types.ts";
 import { discordMessageSchema } from "./schemas.ts";
 import { setPinnedMessage } from "../botResponses/setPinnedMessage.ts";
 
-export const pinnedMessagesRoute = new URLPattern({
+const route = new URLPattern({
   pathname: "/pinned/:channelName",
 });
 
-export const pinnedMessagesRouter = async (
-  req: Request,
-  botContext: Bot
-): Promise<Response | undefined> => {
-  const match = pinnedMessagesRoute.exec(req.url);
-  if (!match) {
-    // do a thing
-    return undefined;
-  }
-
+const handler: RouteHandler = async (match, req, botContext) => {
   const channelName = match.pathname.groups.channelName;
   if (!isValidChannel(channelName)) {
     return httpInvalidRequest({
@@ -35,6 +26,7 @@ export const pinnedMessagesRouter = async (
     console.error(e);
     return e;
   });
+
   if (body instanceof Error) {
     return httpInvalidRequest({ ...body, message: "invalid json" });
   }
@@ -55,4 +47,9 @@ export const pinnedMessagesRouter = async (
     default:
       return httpMethodNotSupported(`method "${req.method}" not supported`);
   }
+};
+
+export default {
+  route,
+  handler,
 };

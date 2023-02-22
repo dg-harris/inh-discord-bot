@@ -1,6 +1,10 @@
+import { RouteDefinition, RouteHandler } from "./localServer.types.ts";
+import { httpInvalidRequest, notFound } from "./responses.ts";
+
 import { Bot } from "../deps.ts";
-import { messagesRouter } from "./messagesRouter.ts";
-import { pinnedMessagesRouter } from "./pinnedMessagesRouter.ts";
+import { isValidChannel } from "./channels.ts";
+import messagesRouter from "./messagesRouter.ts";
+import pinnedMessagesRouter from "./pinnedMessagesRouter.ts";
 
 /**
  * Starts a small local http server
@@ -21,13 +25,37 @@ export const startServer = async (botContext: Bot) => {
   }
 };
 
+// add routes here, they will be evaluated in the order provided
+const routers: RouteDefinition[] = [messagesRouter, pinnedMessagesRouter];
+
 const handleRequest = async (httpConn: Deno.HttpConn, botContext: Bot) => {
   for await (const requestEvent of httpConn) {
-    // add routes here
-    // routes should return a response object if the url matches or undefined if the url does not match
-    const result: Response | undefined =
-      (await pinnedMessagesRouter(requestEvent.request, botContext)) ||
-      (await messagesRouter(requestEvent.request, botContext));
-    if (result) return requestEvent.respondWith(result);
+    // Find Route to handle request
+    let match: URLPatternResult | null = null;
+    let handler: RouteHandler | null = null;
+    for (const router of routers) {
+      match = router.route.exec(requestEvent.request.url);
+      if (match) {
+        handler = router.handler;
+        break;
+      }
+    }
+
+    if (match && handler) {
+      // Load channelId into channel name param
+      const channelName = match.pathname.groups.channelName;
+      if (typeof channelName !== "undefined" && !isValidChannel(channelName)) {
+        return httpInvalidRequest({
+          message: `invalid channel name ${channelName}`,
+        });
+      }
+
+      const response = await handler(match, requestEvent.request, botContext);
+      return requestEvent.respondWith(response);
+    }
+
+    return requestEvent.respondWith(
+      notFound({ message: "Route does not exist" })
+    );
   }
 };
