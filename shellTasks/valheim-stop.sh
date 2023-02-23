@@ -8,9 +8,9 @@
 enter="$(grep -o -i ": Got connection SteamID" /home/kvamme/logs/valheim_log.txt | wc -l)"
 left="$(grep -o -i ": Closing socket" /home/kvamme/logs/valheim_log.txt | wc -l)"
 
-if [ $(($enter-$left)) -ne 0 ]; then
+if [ $(($enter - $left)) -ne 0 ]; then
 	echo "Cannot stop while people are playing!"
-exit
+	exit
 fi
 
 sudo systemctl stop valheim

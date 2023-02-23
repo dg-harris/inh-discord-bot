@@ -6,6 +6,7 @@ import {
 import { Command, CommandHandler, DiscordResponse } from "../global.types.ts";
 
 import { ButtonStyles } from "../botResponses/messaging.types.ts";
+import { invokeAsyncShellTask } from "./invokeAsyncShellTask.ts";
 import { invokeShellTask } from "../util/invokeShellTask.ts";
 
 interface CommandConfig {
@@ -68,6 +69,10 @@ export const createHandler = (commands: CommandConfigs): CommandHandler => {
 
 export const shellSubcommandHander = (command: Command) =>
   invokeShellTask(`${command.name}-${command.args[0]}`);
+
+export const asyncShellSubcommandHandler = (command: Command) => {
+  return invokeAsyncShellTask(`${command.name}-${command.args[0]}`);
+};
 
 export const gameCommandConfigs: CommandConfigs = {
   start: {

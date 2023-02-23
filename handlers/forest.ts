@@ -1,4 +1,8 @@
-import { createHandler, shellSubcommandHander } from "../util/handlers.ts";
+import {
+  asyncShellSubcommandHandler,
+  createHandler,
+  shellSubcommandHander,
+} from "../util/handlers.ts";
 
 import { ButtonStyles } from "../botResponses/messaging.types.ts";
 import { CommandHandler } from "../global.types.ts";
@@ -9,7 +13,7 @@ export const invokeForestCommand: CommandHandler = createHandler({
     buttonSettings: { style: ButtonStyles.Success },
   },
   stop: {
-    task: shellSubcommandHander,
+    task: asyncShellSubcommandHandler,
     buttonSettings: { style: ButtonStyles.Danger },
   },
   status: { task: shellSubcommandHander },

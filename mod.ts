@@ -20,7 +20,8 @@ const bot = createBot({
     Intents.GuildMessages |
     Intents.GuildEmojis |
     Intents.GuildWebhooks |
-    Intents.MessageContent,
+    Intents.MessageContent |
+    Intents.DirectMessages,
   events: {
     ready(bot) {
       console.log("Successfully connected to gateway");
@@ -31,6 +32,8 @@ const bot = createBot({
       if (!command) {
         return;
       }
+
+      client.helpers.addReaction(message.channelId, message.id, "✅");
 
       const sendResponse = (results: DiscordResponse) => {
         if (isString(results))

@@ -1,4 +1,5 @@
 #!/bin/bash
+source "$(dirname "$BASH_SOURCE")/_messageFunctions.sh"
 
 (cd ~/Forest/docker-the-forest-dedicated-server && ./stop.sh)
-echo "The Forest is stopping."
+sendMessage "The Forest is stopping."

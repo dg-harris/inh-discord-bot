@@ -7,7 +7,8 @@ import { invokeRawCommand } from "./invokeRawCommand.ts";
  * @returns results of the command as a string
  */
 
-// deno-lint-ignore require-await -- this is done for consistency and to return a promise from dry run automatically
+// this is done for consistency and to return a promise from dry run automatically
+// deno-lint-ignore require-await
 export const invokeShellTask: CommandRunner = async (command, skipDryRun) => {
   const script = `./shellTasks/${command}.sh`;
   return invokeRawCommand(script, skipDryRun);
