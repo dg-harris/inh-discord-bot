@@ -28,7 +28,7 @@ const handler: RouteHandler = async (match, req, botContext) => {
   try {
     body = JSON.parse(text);
   } catch (e) {
-    console.error;
+    console.error(e);
     body = e;
   }
   // const body = await req.json().catch((e) => {

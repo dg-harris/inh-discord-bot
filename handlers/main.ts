@@ -2,13 +2,16 @@ import { ButtonStyles } from "../botResponses/messaging.types.ts";
 import { CommandHandler } from "../global.types.ts";
 import { getButtonGridPayload } from "../botResponses/buttons.ts";
 import { invokeFactorioCommand } from "./factorio.ts";
+import { invokeForestCommand } from "./forest.ts";
+import { invokeRawCommand } from "../util/invokeRawCommand.ts";
 import { invokeShellTask } from "../util/invokeShellTask.ts";
 import { invokeTestCommand } from "./test.ts";
 import { invokeVRisingCommand } from "./vrising.ts";
 import { invokeValheimCommand } from "./valheim.ts";
-import { invokeForestCommand } from "./forest.ts";
 import { invokeZomboidCommand } from "./zomboid.ts";
 import { isDryRun } from "../util/isDryRun.ts";
+import { rollbackToPrevious } from "../update/rollbackToPrevious.ts";
+import { updateToLatest } from "../update/updateToLatest.ts";
 
 export const handleCommand: CommandHandler = (command) => {
   switch (command.name) {
@@ -53,7 +56,7 @@ export const handleCommand: CommandHandler = (command) => {
               label: "🧛 V Rising",
               customId: "vrising",
             },
-		{
+            {
               label: "🌲 The Forest",
               customId: "forest",
             },
@@ -73,6 +76,15 @@ export const handleCommand: CommandHandler = (command) => {
           ],
         ])
       );
+    case "update":
+      return updateToLatest();
+    case "rollback":
+      return rollbackToPrevious();
+    case "version":
+      return invokeRawCommand(
+        ["git", "rev-parse", "--short", "HEAD"],
+        true
+      ).then((commit) => `Current version on disk is: ${commit}`);
     case "cancel":
       return Promise.resolve("Command was cancelled");
     case "test":

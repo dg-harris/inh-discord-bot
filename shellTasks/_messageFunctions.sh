@@ -4,5 +4,6 @@ getMessagePayload() {
 
 sendMessage() {
   local json=$(getMessagePayload "$1")
-  curl -X POST --data "$json" http://127.0.0.1:8080/messages/dev
+  local CHANNEL="${2:-dev}"
+  curl -o /dev/null -s -X POST --data "$json" http://127.0.0.1:8080/messages/$CHANNEL
 }
