@@ -1,4 +1,3 @@
-import { CommandRunner } from "../global.types.ts";
 import { isDryRun } from "./isDryRun.ts";
 
 /**
@@ -7,15 +6,16 @@ import { isDryRun } from "./isDryRun.ts";
  * @param cmd raw command
  * @returns
  */
-export const invokeRawCommand: CommandRunner = async (
-  rawCommand,
-  skipDryRun
-) => {
+export const invokeRawCommand = async (
+  rawCommand: string | string[],
+  skipDryRun?: boolean
+): Promise<string> => {
   if (isDryRun() && !skipDryRun) {
     return `Would have executed command: ${rawCommand}`;
   }
 
-  const cmd = rawCommand.split(" ");
+  const cmd =
+    typeof rawCommand === "string" ? rawCommand.split(" ") : rawCommand;
   try {
     const results = Deno.run({
       cmd,
